@@ -151,6 +151,9 @@ public class MainCharacter : MonoBehaviour {
     }
 
     private void FixedUpdate() {
+        if (vaccineIndicator.activeSelf && clueIndicator.activeSelf)
+            vaccineIndicator.SetActive(false);
+
         RaycastHit2D sideHit = Physics2D.BoxCast(sideRectCenter, sideRect.size, 0, Vector2.up, 0, interactiveLayer);
         if (sideHit.collider != null) {
             Bed _bed = sideHit.collider.GetComponent<Bed>();
