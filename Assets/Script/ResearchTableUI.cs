@@ -8,18 +8,13 @@ public class ResearchTableUI : MonoBehaviour
 {
     static public ResearchTableUI ins;
 
+    [SerializeField]
+    private TextMeshProUGUI clueText;
+
     private Canvas canvas;
     private GraphicRaycaster raycaster;
 
-    [SerializeField]
-    private RectTransform scrollViewContent;
-
-    [SerializeField]
-    private TextMeshProUGUI textPrefab;
-
-    [SerializeField]
-    private float padding;
-    private float y = 0;
+    private bool _firstClueGot = false;
 
     private void Awake() {
         ins = this;
@@ -27,23 +22,11 @@ public class ResearchTableUI : MonoBehaviour
         canvas = GetComponent<Canvas>();
         raycaster = GetComponent<GraphicRaycaster>();
 
-        textPrefab.gameObject.SetActive(false);
+        clueText.text = "No clue yet.";
     }
 
     private void Start() {
         Deactivate();
-        // float y = 0;
-
-        // for (int i = 0; i < 10; i++) {
-        //     TextMeshProUGUI text = Instantiate(textPrefab, scrollViewContent);
-        //     text.text = string.Format("Line. {0}", i);
-        //     text.rectTransform.anchoredPosition = new Vector2(0, y);
-        //     text.gameObject.SetActive(true);
-
-        //     y -= text.rectTransform.sizeDelta.y + padding;
-        // }
-
-        // scrollViewContent.sizeDelta = new Vector2(scrollViewContent.sizeDelta.x, Mathf.Abs(y));
     }
 
     public void Activate() {
@@ -58,11 +41,14 @@ public class ResearchTableUI : MonoBehaviour
     }
 
     public void FeedNewClue() {
-        TextMeshProUGUI text = Instantiate(textPrefab, scrollViewContent);
-        text.text = GameManager.NextClue();
-        text.rectTransform.anchoredPosition = new Vector2(0, y);
-        text.gameObject.SetActive(true);
-
-        y -= text.rectTransform.sizeDelta.y + padding;
+        if (_firstClueGot)
+        {
+            clueText.text += "\n" + GameManager.NextClue();
+        }
+        else
+        {
+            clueText.text = GameManager.NextClue();
+            _firstClueGot = true;
+        }
     }
 }
